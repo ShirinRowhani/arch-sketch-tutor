@@ -14,7 +14,7 @@ def check_password():
     if st.session_state["authenticated"]:
         return True
     
-    st.markdown("<h2 style='text-align: center;'>🔒 Architect Studio Login</h2>", unsafe_style=True)
+    st.markdown("<h2 style='text-align: center;'>🔒 Architect Studio Login</h2>", unsafe_allow_html=True)
     cols = st.columns([1, 2, 1])
     with cols[1]:
         # Looks for 'password' in Streamlit Secrets. If not set yet, defaults to 'sketch2026'
