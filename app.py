@@ -39,14 +39,13 @@ def check_password():
 if not check_password():
     st.stop()
 
-# 3. SET UP GEMINI API (Fixed with explicit models/ prefix to prevent NotFound errors)
+# 3. SET UP GEMINI API
 api_key = st.secrets.get("GEMINI_API_KEY", "")
 if api_key:
     genai.configure(api_key=api_key)
 else:
     st.warning("⚠️ Gemini API key is missing. The critique feature will be disabled.")
 
-# Initialize parent setting variables if not present
 if "course_video_url" not in st.session_state:
     st.session_state["course_video_url"] = "https://youtu.be/yocInfqlYqw"
 if "playlist_id" not in st.session_state:
@@ -61,52 +60,98 @@ mode = st.radio(
     horizontal=True
 )
 
-# --- MODE A: 5-LEVEL COURSE (NOW FULLY UNLOCKED) ---
+# --- DETAILED ARCHITECTURAL MASTER DRAWING (COMMON BACKGROUND LAYER) ---
+# This builds a full, detailed cottage sketch in faint light gray (#D3D3D3)
+cottage_bg = """
+    <path d="M 100,140 L 220,100 L 220,240 L 100,220 Z" fill="none" stroke="#D3D3D3" stroke-width="2"/>
+    <path d="M 220,130 L 320,110 L 320,200 L 220,220" fill="none" stroke="#D3D3D3" stroke-width="2"/>
+    <path d="M 100,140 L 160,70 L 220,100" fill="none" stroke="#D3D3D3" stroke-width="2"/>
+    <path d="M 160,70 L 260,50 L 320,110 L 220,100 Z" fill="none" stroke="#D3D3D3" stroke-width="2"/>
+    <path d="M 250,75 L 250,35 L 275,32 L 275,68" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
+    <rect x="246" y="30" width="33" height="6" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
+    <path d="M 135,170 L 175,157 L 175,227 L 135,223 Z" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
+    <path d="M 245,145 L 295,135 L 295,185 L 245,195 Z" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
+    <path d="M 145,115 L 175,105 L 175,130 L 145,135 Z" fill="none" stroke="#D3D3D3" stroke-width="1"/>
+"""
+
+# --- MODE A: 5-LEVEL COURSE ---
 if mode == "🏆 Play the 5-Level Course":
+    
+    # 5 Levels featuring Grayed background + bold custom highlighted dash lines
     lessons = {
-        "Level 1: The Wobbly Box & Circles": {
+        "Level 1: Structural Volumes (Wobbly Line Confidence)": {
             "timestamp": "06:29",
-            "instructions": "Practice loose, wobbly lines with character. Avoid straight edges. Draw overlapping wobbly circles.",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><path d="M 100,110 Q 95,180 100,220 Q 160,225 220,220 Q 225,180 220,110 Q 160,105 100,110" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/><path d="M 100,110 Q 130,65 160,60 Q 220,65 220,110" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/><path d="M 160,60 Q 165,130 160,175" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/><circle cx="310" cy="140" r="45" fill="none" stroke="#FFC300" stroke-width="2" stroke-dasharray="4,2"/></svg>"""
+            "instructions": "Trace the primary 3D boxes of the house framework. Keep your pen lines intentionally loose and sketchy—no rulers!",
+            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                {cottage_bg}
+                <path d="M 100,140 L 220,100 L 220,240 L 100,220 Z" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/>
+                <path d="M 220,130 L 320,110 L 320,200 L 220,220" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/>
+            </svg>"""
         },
-        "Level 2: Two-Point Perspective Box": {
+        "Level 2: Roof Planes & Angles": {
             "timestamp": "10:04",
-            "instructions": "Draw your central vertical corner. Angle lines so they 'fan' toward your imaginary Vanishing Points.",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><line x1="10" y1="130" x2="390" y2="130" stroke="#00FFFF" stroke-width="2"/><circle cx="40" cy="130" r="5" fill="#FF00FF"/><circle cx="360" cy="130" r="5" fill="#FF00FF"/><line x1="200" y1="80" x2="200" y2="220" stroke="#FF5733" stroke-width="4"/><line x1="200" y1="80" x2="40" y2="130" stroke="#FF5733" stroke-width="2" stroke-dasharray="3,3"/><line x1="200" y1="220" x2="40" y2="130" stroke="#FF5733" stroke-width="2" stroke-dasharray="3,3"/><line x1="110" y1="110" x2="110" y2="180" stroke="#FF5733" stroke-width="3"/></svg>"""
+            "instructions": "Practice matching structural roof slants. Focus on how parallel roof planes slant downward toward the same hidden vanishing points.",
+            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                {cottage_bg}
+                <path d="M 100,140 L 160,70 L 220,100 Z" fill="none" stroke="#00FFFF" stroke-width="4" stroke-dasharray="6,4"/>
+                <path d="M 160,70 L 260,50 L 320,110 L 220,100 Z" fill="none" stroke="#00FFFF" stroke-width="4" stroke-dasharray="6,4"/>
+            </svg>"""
         },
         "Level 3: The 6-Dot Proportions Method": {
             "timestamp": "19:50",
-            "instructions": "Place exactly 6 dots on your paper first to lock in the dimensions before drawing lines.",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><circle cx="200" cy="50" r="8" fill="#1f77b4"/><circle cx="200" cy="240" r="8" fill="#1f77b4"/><circle cx="100" cy="120" r="8" fill="#1f77b4"/><circle cx="300" cy="110" r="8" fill="#1f77b4"/><circle cx="100" cy="200" r="8" fill="#1f77b4"/><circle cx="300" cy="190" r="8" fill="#1f77b4"/></svg>"""
+            "instructions": "Before drawing shapes, place these 6 critical boundary tracking dots on your physical paper to perfectly lock in your architecture scale.",
+            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                {cottage_bg}
+                <circle cx="160" cy="70" r="7" fill="#1f77b4"/><text x="156" y="74" fill="#fff" font-size="10" font-weight="bold">1</text>
+                <circle cx="100" cy="220" r="7" fill="#1f77b4"/><text x="96" y="224" fill="#fff" font-size="10" font-weight="bold">2</text>
+                <circle cx="220" cy="240" r="7" fill="#1f77b4"/><text x="216" y="244" fill="#fff" font-size="10" font-weight="bold">3</text>
+                <circle cx="320" cy="200" r="7" fill="#1f77b4"/><text x="316" y="204" fill="#fff" font-size="10" font-weight="bold">4</text>
+                <circle cx="100" cy="140" r="7" fill="#1f77b4"/><text x="96" y="144" fill="#fff" font-size="10" font-weight="bold">5</text>
+                <circle cx="320" cy="110" r="7" fill="#1f77b4"/><text x="316" y="114" fill="#fff" font-size="10" font-weight="bold">6</text>
+            </svg>"""
         },
-        "Level 4: The Cottage Silhouette": {
+        "Level 4: Windows & Doors Placement": {
             "timestamp": "20:54",
-            "instructions": "Connect the structural points of your 6-dot grid to build the outline structure of the building.",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><path d="M 100,120 L 200,80 L 200,220 L 100,200 Z" fill="none" stroke="#FF5733" stroke-width="4"/><path d="M 200,110 L 300,90 L 300,180 L 200,200" fill="none" stroke="#FF5733" stroke-width="4"/></svg>"""
+            "instructions": "Trace the structural window cavities and front entry archways. Make sure your vertical window lines stay perfectly upright.",
+            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                {cottage_bg}
+                <path d="M 135,170 L 175,157 L 175,227 L 135,223 Z" fill="none" stroke="#FF00FF" stroke-width="4" stroke-dasharray="5,3"/>
+                <path d="M 245,145 L 295,135 L 295,185 L 245,195 Z" fill="none" stroke="#FF00FF" stroke-width="4" stroke-dasharray="5,3"/>
+                <path d="M 145,115 L 175,105 L 175,130 L 145,135 Z" fill="none" stroke="#FF00FF" stroke-width="3" stroke-dasharray="5,3"/>
+            </svg>"""
         },
-        "Level 5: Architectural Details & Shading": {
+        "Level 5: Shading, Textures & Details": {
             "timestamp": "21:28",
-            "instructions": "Place the doorway and window boxes. Add loose diagonal hatching lines to create shadow.",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><path d="M 130,160 L 170,145 L 170,210 L 130,205 Z" fill="none" stroke="#FFC300" stroke-width="3"/><path d="M 115,130 L 140,120 L 140,150 L 115,155 Z" fill="none" stroke="#FFC300" stroke-width="2"/></svg>"""
+            "instructions": "Time for finishing details! Trace the chimney stack on the roof and add clean, parallel cross-hatching stroke paths for shadows.",
+            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                {cottage_bg}
+                <path d="M 250,75 L 250,35 L 275,32 L 275,68 Z" fill="none" stroke="#FFC300" stroke-width="3" stroke-dasharray="4,2"/>
+                <line x1="110" y1="145" x2="110" y2="155" stroke="#FFC300" stroke-width="2"/>
+                <line x1="125" y1="140" x2="125" y2="150" stroke="#FFC300" stroke-width="2"/>
+                <line x1="140" y1="135" x2="140" y2="145" stroke="#FFC300" stroke-width="2"/>
+                <line x1="155" y1="130" x2="155" y2="140" stroke="#FFC300" stroke-width="2"/>
+                <line x1="235" y1="120" x2="235" y2="135" stroke="#FFC300" stroke-width="2"/>
+                <line x1="255" y1="115" x2="255" y2="130" stroke="#FFC300" stroke-width="2"/>
+            </svg>"""
         }
     }
 
-    # FIX: Manual Dropdown Selector lets him skip to any level instantly!
     selected_level = st.selectbox("Select Your Lesson Level:", list(lessons.keys()))
     
     col1, col2 = st.columns([1, 1])
     with col1:
         st.subheader("📺 Tutorial Video")
         st.video(st.session_state["course_video_url"])
-        st.info(f"👉 Play near **{lessons[selected_level]['timestamp']}**. {lessons[selected_level]['instructions']}")
+        st.info(f"👉 Watch near **{lessons[selected_level]['timestamp']}**. {lessons[selected_level]['instructions']}")
 
     with col2:
         st.subheader("📱 Camera Tracing Overlays")
-        opacity = st.slider("Template Transparency:", 0.0, 1.0, 0.5, 0.1)
+        opacity = st.slider("Template Transparency:", 0.0, 1.0, 0.6, 0.1)
         
+        # FIXED CAMERA WRAPPER: object-fit: fill + user-action control locks elements perfectly together
         camera_html = f"""
-        <div style="position: relative; width: 100%; max-width: 500px; aspect-ratio: 4/3; background-color: #000; border-radius: 10px; overflow: hidden; margin: auto;">
-            <video id="webcam" autoplay playsinline style="width:100%; height:100%; object-fit:cover; z-index:1; position:absolute; top:0; left:0;"></video>
+        <div style="position: relative; width: 100%; max-width: 500px; height: 375px; background-color: #000; border-radius: 10px; overflow: hidden; margin: auto; touch-action: none;">
+            <video id="webcam" autoplay playsinline style="width:100%; height:100%; object-fit:fill; z-index:1; position:absolute; top:0; left:0;"></video>
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:{opacity}; z-index:10; pointer-events:none;">
                 {lessons[selected_level]['svg']}
             </div>
@@ -126,17 +171,17 @@ if mode == "🏆 Play the 5-Level Course":
                 try:
                     img = Image.open(uploaded_image)
                     prompt = f"Review this child's sketch for {selected_level}. Praise 2 features, point out 1 adjustment warmly. Keep it simple and encouraging."
-                    model = genai.GenerativeModel("models/gemini-1.5-flash") # Fixed naming convention
+                    model = genai.GenerativeModel("models/gemini-1.5-flash") # Explicit Model Path Fix applied
                     response = model.generate_content([prompt, img])
                     st.success("📝 Professor's Feedback:")
                     st.markdown(response.text)
                 except Exception as e:
                     st.error(f"Error getting feedback: {e}")
 
-# --- MODE B: PLAYLIST HUB & TRACING LIBRARY (FOR THE 58-VIDEO SERIES) ---
+# --- MODE B: PLAYLIST HUB & TRACING LIBRARY ---
 else:
     st.subheader("🎬 Playlist Hub & Tracing Library")
-    st.write("Watch any video in the playlist, or upload a custom screenshot to match Scottie's drawings perfectly!")
+    st.write("Browse Scottie's full playlist and choose a preset pattern or upload a custom tracking screenshot!")
 
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -145,7 +190,6 @@ else:
             f'<iframe width="100%" height="315" src="{embed_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:10px;"></iframe>',
             height=320
         )
-        st.info("💡 **Playlist Control:** Click the playlist button in the top-right corner of the video box above to toggle through all 58 lessons!")
 
     with col2:
         st.subheader("📱 Choose Your Tracing Template")
@@ -155,20 +199,16 @@ else:
                 "📸 [Custom Option] Upload Playlist Screenshot",
                 "🏠 Library 1: Cozy Street Lamp",
                 "🚪 Library 2: Classic Arched Doorway",
-                "☕ Library 3: Cafe Window & Awning",
-                "🧱 Library 4: Chimney & Roof Shingles",
-                "🌳 Library 5: Architectural Trees"
+                "☕ Library 3: Cafe Window & Awning"
             ]
         )
         
-        opacity = st.slider("Template Transparency:", 0.0, 1.0, 0.4, 0.1)
+        opacity = st.slider("Template Transparency:", 0.0, 1.0, 0.5, 0.1)
 
         library_svgs = {
             "🏠 Library 1: Cozy Street Lamp": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><line x1="50" y1="280" x2="350" y2="280" stroke="#FF5733" stroke-width="3"/><line x1="200" y1="280" x2="200" y2="100" stroke="#FF5733" stroke-width="4"/><rect x="140" y="120" width="60" height="40" rx="3" fill="none" stroke="#FFC300" stroke-width="2"/></svg>""",
             "🚪 Library 2: Classic Arched Doorway": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><path d="M 120,260 L 120,130 A 80,80 0 0,1 280,130 L 280,260" fill="none" stroke="#FF5733" stroke-width="4"/><path d="M 140,260 L 140,140 A 60,60 0 0,1 260,140 L 260,260" fill="none" stroke="#00FFFF" stroke-width="2.5"/></svg>""",
-            "☕ Library 3: Cafe Window & Awning": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><rect x="130" y="110" width="140" height="130" fill="none" stroke="#FF5733" stroke-width="4"/><path d="M 110,110 L 130,60 L 270,60 L 290,110 Z" fill="none" stroke="#FFC300" stroke-width="3"/></svg>""",
-            "🧱 Library 4: Chimney & Roof Shingles": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><line x1="50" y1="220" x2="350" y2="100" stroke="#FF5733" stroke-width="4"/><rect x="223" y="60" width="64" height="10" fill="none" stroke="#FFC300" stroke-width="3"/></svg>""",
-            "🌳 Library 5: Architectural Trees": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><path d="M 150,260 Q 155,180 140,150 Q 160,180 160,260" fill="none" stroke="#FF5733" stroke-width="4"/><path d="M 100,140 Q 80,100 120,80 Q 160,50 180,90 Q 220,100 190,140 Z" fill="none" stroke="#33FF57" stroke-width="3" stroke-dasharray="4,2"/></svg>"""
+            "☕ Library 3: Cafe Window & Awning": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;"><rect x="130" y="110" width="140" height="130" fill="none" stroke="#FF5733" stroke-width="4"/><path d="M 110,110 L 130,60 L 270,60 L 290,110 Z" fill="none" stroke="#FFC300" stroke-width="3"/></svg>"""
         }
 
         overlay_html = ""
@@ -177,15 +217,15 @@ else:
             if custom_screenshot:
                 pil_img = Image.open(custom_screenshot)
                 b64_img = get_image_base64(pil_img)
-                overlay_html = f'<img src="{b64_img}" style="width:100%; height:100%; object-fit:contain; position:absolute; top:0; left:0;" />'
+                overlay_html = f'<img src="{b64_img}" style="width:100%; height:100%; object-fit:fill; position:absolute; top:0; left:0;" />'
             else:
-                overlay_html = '<div style="color:white; display:flex; align-items:center; justify-content:center; height:100%; border:2px dashed #444; border-radius:10px; margin: 10px;">Pause your playlist video, take a screenshot, and upload it here to trace it!</div>'
+                overlay_html = '<div style="color:white; display:flex; align-items:center; justify-content:center; height:100%; border:2px dashed #444; border-radius:10px; margin: 10px;">Pause your video, snap a screenshot, and drop it here to trace!</div>'
         else:
             overlay_html = library_svgs[library_choice]
 
         camera_html = f"""
-        <div style="position: relative; width: 100%; max-width: 500px; aspect-ratio: 4/3; background-color: #000; border-radius: 10px; overflow: hidden; margin: auto;">
-            <video id="webcam" autoplay playsinline style="width:100%; height:100%; object-fit:cover; z-index:1; position:absolute; top:0; left:0;"></video>
+        <div style="position: relative; width: 100%; max-width: 500px; height: 375px; background-color: #000; border-radius: 10px; overflow: hidden; margin: auto; touch-action: none;">
+            <video id="webcam" autoplay playsinline style="width:100%; height:100%; object-fit:fill; z-index:1; position:absolute; top:0; left:0;"></video>
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:{opacity}; z-index:10; pointer-events:none;">
                 {overlay_html}
             </div>
