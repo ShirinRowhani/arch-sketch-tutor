@@ -8,7 +8,7 @@ import io
 # 1. PAGE CONFIGURATION
 st.set_page_config(page_title="AI Architecture Sketch Tutor", layout="wide")
 
-# Helper to convert PIL image to base64 for custom screenshot overlays
+# Helper to convert PIL image to base64 for custom screenshot uploads
 def get_image_base64(pil_img):
     buffered = io.BytesIO()
     pil_img.save(buffered, format="PNG")
@@ -39,7 +39,7 @@ def check_password():
 if not check_password():
     st.stop()
 
-# 3. SET UP GEMINI API 
+# 3. SET UP GEMINI API
 api_key = st.secrets.get("GEMINI_API_KEY", "")
 if api_key:
     genai.configure(api_key=api_key)
@@ -60,110 +60,104 @@ mode = st.radio(
     horizontal=True
 )
 
-# --- REUSABLE ARCHITECTURAL LAYERS FOR THE ADVANCED COTTAGE STEPS ---
-cottage_base_gray = """
-    <path d="M 100,150 L 210,110 L 210,240 L 100,220 Z" fill="none" stroke="#D3D3D3" stroke-width="2"/>
-    <path d="M 210,110 L 310,90 L 310,190 L 210,240" fill="none" stroke="#D3D3D3" stroke-width="2"/>
-    <path d="M 100,150 L 155,80 L 210,110" fill="none" stroke="#D3D3D3" stroke-width="2"/>
-    <path d="M 155,80 L 255,60 L 310,90" fill="none" stroke="#D3D3D3" stroke-width="2"/>
-    <path d="M 250,75 L 250,35 L 275,32 L 275,68" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
-    <rect x="246" y="30" width="30" height="5" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
-    <path d="M 135,175 L 175,162 L 175,227 L 135,223 Z" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
-    <path d="M 235,145 L 285,135 L 285,185 L 235,195 Z" fill="none" stroke="#D3D3D3" stroke-width="1.5"/>
-    <path d="M 145,120 L 175,110 L 175,135 L 145,140 Z" fill="none" stroke="#D3D3D3" stroke-width="1"/>
-"""
+# Common URL for the real house photo used across Practices 4-7 to simulate step-by-step progress
+real_house_url = "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&auto=format&fit=crop&q=80"
 
-# --- MODE A: 7-LEVEL COURSE MATCHING TIMESTAMPS ---
+# --- MODE A: 7-LEVEL COURSE WITH REAL IMAGE BACKDROPS ---
 if mode == "🏆 Play the 7-Level Course":
     
     lessons = {
         "Practice 1: Linework Basics (04:43)": {
             "timestamp": "04:43",
-            "instructions": """Practice loose, relaxed straight lines, squares, and overlapping circles. Do not use a ruler! Move your whole arm.""",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                <line x1="40" y1="50" x2="160" y2="50" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
-                <line x1="40" y1="70" x2="160" y2="70" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
-                <line x1="40" y1="90" x2="160" y2="90" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
-                <rect x="230" y="40" width="50" height="50" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,4"/>
-                <rect x="300" y="40" width="50" height="50" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,4"/>
-                <circle cx="100" cy="190" r="40" fill="none" stroke="#00FFFF" stroke-width="2.5" stroke-dasharray="4,2"/>
-                <circle cx="270" cy="190" r="35" fill="none" stroke="#00FFFF" stroke-width="2.5" stroke-dasharray="4,2"/>
-            </svg>"""
+            "instructions": """Practice loose, relaxed straight lines, squares, and overlapping circles on a blank canvas. Do not use a ruler! Move your whole arm.""",
+            "html_overlay": """
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <line x1="40" y1="50" x2="160" y2="50" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
+                    <line x1="40" y1="70" x2="160" y2="70" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
+                    <line x1="40" y1="90" x2="160" y2="90" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
+                    <rect x="230" y="40" width="50" height="50" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,4"/>
+                    <rect x="300" y="40" width="50" height="50" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,4"/>
+                    <circle cx="100" cy="190" r="40" fill="none" stroke="#00FFFF" stroke-width="2.5" stroke-dasharray="4,2"/>
+                    <circle cx="270" cy="190" r="35" fill="none" stroke="#00FFFF" stroke-width="2.5" stroke-dasharray="4,2"/>
+                </svg>
+            """
         },
-        "Practice 2: 1-Point Perspective (07:37)": {
+        "Practice 2: Real 1-Point Perspective (07:37)": {
             "timestamp": "07:37",
-            "instructions": """Trace 4 examples of 1-Point perspective. Notice how all lines lead back to the center Vanishing Point (VP).""",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                <line x1="20" y1="150" x2="380" y2="150" stroke="#D3D3D3" stroke-width="2"/>
-                <circle cx="200" cy="150" r="5" fill="#FF00FF"/>
-                <rect x="40" y="40" width="50" height="40" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
-                <line x1="90" y1="80" x2="200" y2="150" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="3,3"/>
-                <rect x="300" y="40" width="50" height="40" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
-                <line x1="300" y1="80" x2="200" y2="150" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="3,3"/>
-                <rect x="40" y="220" width="50" height="40" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
-                <line x1="90" y1="220" x2="200" y2="150" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="3,3"/>
-                <rect x="300" y="220" width="50" height="40" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
-                <line x1="300" y1="220" x2="200" y2="150" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="3,3"/>
-            </svg>"""
+            "instructions": """Trace the perspective tracks of a real city street. Notice how all physical storefront and road margins converge toward the center point.""",
+            "html_overlay": """
+                <img src="https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=600&auto=format&fit=crop&q=80" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; filter: grayscale(100%) brightness(0.75);" />
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <circle cx="200" cy="165" r="6" fill="#FF00FF"/>
+                    <line x1="0" y1="300" x2="200" y2="165" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/>
+                    <line x1="400" y1="300" x2="200" y2="165" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/>
+                    <line x1="50" y1="50" x2="200" y2="165" stroke="#00FFFF" stroke-width="3" stroke-dasharray="6,4"/>
+                    <line x1="350" y1="50" x2="200" y2="165" stroke="#00FFFF" stroke-width="3" stroke-dasharray="6,4"/>
+                </svg>
+            """
         },
-        "Practice 3: 2-Point Perspective (07:42)": {
+        "Practice 3: Real 2-Point Perspective (07:42)": {
             "timestamp": "07:42",
-            "instructions": """Trace 4 structural blocks fanning outward to a distinct Left Vanishing Point (LVP) and Right Vanishing Point (RVP).""",
-            "svg": """<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                <line x1="10" y1="140" x2="390" y2="140" stroke="#D3D3D3" stroke-width="1.5"/>
-                <circle cx="30" cy="140" r="4" fill="#FF00FF"/><circle cx="370" cy="140" r="4" fill="#FF00FF"/>
-                <line x1="200" y1="40" x2="200" y2="90" stroke="#FF5733" stroke-width="3"/>
-                <line x1="200" y1="40" x2="30" y2="140" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="4,2"/>
-                <line x1="200" y1="40" x2="370" y2="140" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="4,2"/>
-                <line x1="100" y1="180" x2="100" y2="240" stroke="#FF5733" stroke-width="3"/>
-                <line x1="100" y1="180" x2="30" y2="140" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="4,2"/>
-                <line x1="100" y1="180" x2="370" y2="140" stroke="#00FFFF" stroke-width="1.5" stroke-dasharray="4,2"/>
-                <path d="M 280,160 L 320,150 L 320,210 L 280,225 Z" fill="none" stroke="#FF5733" stroke-width="2" stroke-dasharray="4,2"/>
-                <path d="M 280,160 L 250,152 L 250,210 L 280,225 Z" fill="none" stroke="#FF5733" stroke-width="2" stroke-dasharray="4,2"/>
-            </svg>"""
+            "instructions": """Trace the leading corner edge of a real modern skyscraper. See how the structural panels fan out to the left and right sides.""",
+            "html_overlay": """
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&auto=format&fit=crop&q=80" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; filter: grayscale(100%) brightness(0.75);" />
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <line x1="185" y1="20" x2="185" y2="280" stroke="#FF5733" stroke-width="4"/>
+                    <line x1="185" y1="50" x2="10" y2="110" stroke="#00FFFF" stroke-width="3.5" stroke-dasharray="5,4"/>
+                    <line x1="185" y1="250" x2="10" y2="210" stroke="#00FFFF" stroke-width="3.5" stroke-dasharray="5,4"/>
+                    <line x1="185" y1="50" x2="390" y2="110" stroke="#00FFFF" stroke-width="3.5" stroke-dasharray="5,4"/>
+                    <line x1="185" y1="250" x2="390" y2="210" stroke="#00FFFF" stroke-width="3.5" stroke-dasharray="5,4"/>
+                </svg>
+            """
         },
         "Practice 4: Framing & Silhouette Outlines (18:34)": {
             "timestamp": "18:34",
-            "instructions": """Trace the broad outer frame silhouette envelope of the house layout before worrying about any windows or detail blocks.""",
-            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                {cottage_base_gray}
-                <path d="M 100,220 L 100,150 L 155,80 L 255,60 L 310,90 L 310,190 L 210,240 L 100,220" fill="none" stroke="#FF00FF" stroke-width="4" stroke-dasharray="6,4"/>
-                <line x1="210" y1="110" x2="210" y2="240" stroke="#FF00FF" stroke-width="3" stroke-dasharray="6,4"/>
-            </svg>"""
+            "instructions": """Trace the broad external frame profile envelope around this real house photo before sketching any interior objects or windows.""",
+            "html_overlay": f"""
+                <img src="{real_house_url}" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; filter: grayscale(100%) brightness(0.75);" />
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <path d="M 70,260 L 70,160 L 200,75 L 330,160 L 330,260 Z" fill="none" stroke="#FF00FF" stroke-width="4" stroke-dasharray="6,4"/>
+                </svg>
+            """
         },
         "Practice 5: Placing Proportion Reference Dots (19:03)": {
             "timestamp": "19:03",
-            "instructions": """Before sketching lines, trace and place these 6 critical spatial dots to lock in the absolute height and perspective layout.""",
-            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                {cottage_base_gray}
-                <circle cx="155" cy="80" r="8" fill="#1f77b4"/><text x="151" y="84" fill="#fff" font-size="10" font-weight="bold">1</text>
-                <circle cx="100" cy="220" r="8" fill="#1f77b4"/><text x="96" y="224" fill="#fff" font-size="10" font-weight="bold">2</text>
-                <circle cx="210" cy="240" r="8" fill="#1f77b4"/><text x="206" y="244" fill="#fff" font-size="10" font-weight="bold">3</text>
-                <circle cx="310" cy="190" r="8" fill="#1f77b4"/><text x="306" y="194" fill="#fff" font-size="10" font-weight="bold">4</text>
-                <circle cx="100" cy="150" r="8" fill="#1f77b4"/><text x="96" y="154" fill="#fff" font-size="10" font-weight="bold">5</text>
-                <circle cx="310" cy="90" r="8" fill="#1f77b4"/><text x="306" y="94" fill="#fff" font-size="10" font-weight="bold">6</text>
-            </svg>"""
+            "instructions": """Instead of full lines, trace and mark these 6 essential reference dots onto your paper to perfectly map out the real house proportions.""",
+            "html_overlay": f"""
+                <img src="{real_house_url}" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; filter: grayscale(100%) brightness(0.75);" />
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <circle cx="200" cy="75" r="8" fill="#1f77b4"/><text x="196" y="79" fill="#fff" font-size="10" font-weight="bold">1</text>
+                    <circle cx="70" cy="160" r="8" fill="#1f77b4"/><text x="66" y="164" fill="#fff" font-size="10" font-weight="bold">2</text>
+                    <circle cx="330" cy="160" r="8" fill="#1f77b4"/><text x="326" y="164" fill="#fff" font-size="10" font-weight="bold">3</text>
+                    <circle cx="70" cy="260" r="8" fill="#1f77b4"/><text x="66" y="264" fill="#fff" font-size="10" font-weight="bold">4</text>
+                    <circle cx="330" cy="260" r="8" fill="#1f77b4"/><text x="326" y="264" fill="#fff" font-size="10" font-weight="bold">5</text>
+                    <circle cx="200" cy="180" r="8" fill="#1f77b4"/><text x="196" y="184" fill="#fff" font-size="10" font-weight="bold">6</text>
+                </svg>
+            """
         },
         "Practice 6: Building Front & Subdivisions (19:38)": {
             "timestamp": "19:38",
-            "instructions": """Trace the building's front facade profile and section layouts, transitioning cleanly from big primary wall frames down to smaller openings.""",
-            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                {cottage_base_gray}
-                <path d="M 100,150 L 210,110 L 210,240 L 100,220 Z" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/>
-                <path d="M 100,150 L 155,80 L 210,110" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="6,4"/>
-                <path d="M 135,175 L 175,162 L 175,227 L 135,223 Z" fill="none" stroke="#00FFFF" stroke-width="3"/>
-            </svg>"""
+            "instructions": """Trace the main structural front wall pane block and partition lines to frame out where the entrance door fits onto the facade.""",
+            "html_overlay": f"""
+                <img src="{real_house_url}" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; filter: grayscale(100%) brightness(0.75);" />
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <path d="M 70,160 L 330,160 L 330,260 L 70,260 Z" fill="none" stroke="#FF5733" stroke-width="4" stroke-dasharray="6,4"/>
+                    <path d="M 175,260 L 175,180 L 225,180 L 225,260 Z" fill="none" stroke="#00FFFF" stroke-width="3" stroke-dasharray="4,2"/>
+                </svg>
+            """
         },
-        "Practice 7: Detailed Cottage Masterclass (19:55)": {
+        "Practice 7: Detailed House Masterclass (19:55)": {
             "timestamp": "19:55",
-            "instructions": """Trace the entire compound architectural silhouette—including side wing expansions, roofs, chimneys, and fine hatching texturing paths.""",
-            "svg": f"""<svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
-                {cottage_base_gray}
-                <path d="M 100,150 L 210,110 L 310,90 L 310,190 L 210,240 L 100,220 Z" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
-                <path d="M 155,80 L 255,60 L 310,90" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
-                <path d="M 250,75 L 250,35 L 275,32 L 275,68 Z" fill="none" stroke="#FFC300" stroke-width="3.5"/>
-                <path d="M 235,145 L 285,135 L 285,185 L 235,195 Z" fill="none" stroke="#00FFFF" stroke-width="2.5"/>
-            </svg>"""
+            "instructions": """Trace the complete layout over the real house photo—including parallel roofing profiles, entryway frames, and structural windows.""",
+            "html_overlay": f"""
+                <img src="{real_house_url}" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; filter: grayscale(100%) brightness(0.75);" />
+                <svg viewBox="0 0 400 300" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; pointer-events:none;">
+                    <path d="M 70,260 L 70,160 L 200,75 L 330,160 L 330,260 Z" fill="none" stroke="#FF5733" stroke-width="3" stroke-dasharray="5,3"/>
+                    <path d="M 175,260 L 175,180 L 225,180 L 225,260 Z" fill="none" stroke="#00FFFF" stroke-width="2.5"/>
+                    <path d="M 100,180 L 140,180 L 140,220 L 100,220 Z" fill="none" stroke="#FFC300" stroke-width="2.5"/>
+                    <path d="M 260,180 L 300,180 L 300,220 L 260,220 Z" fill="none" stroke="#FFC300" stroke-width="2.5"/>
+                </svg>
+            """
         }
     }
 
@@ -179,11 +173,12 @@ if mode == "🏆 Play the 7-Level Course":
         st.subheader("📱 Camera Tracing Overlays")
         opacity = st.slider("Template Transparency:", 0.0, 1.0, 0.6, 0.1)
         
+        # LOCKED FIXED ASSET RATIO CONTAINMENT
         camera_html = f"""
         <div style="position: relative; width: 100%; max-width: 500px; height: 375px; background-color: #000; border-radius: 10px; overflow: hidden; margin: auto; touch-action: none;">
             <video id="webcam" autoplay playsinline style="width:100%; height:100%; object-fit:fill; z-index:1; position:absolute; top:0; left:0;"></video>
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:{opacity}; z-index:10; pointer-events:none;">
-                {lessons[selected_level]['svg']}
+                {lessons[selected_level]['html_overlay']}
             </div>
         </div>
         <script>
